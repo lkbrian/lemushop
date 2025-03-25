@@ -1,0 +1,676 @@
+import type { Product } from "@/lib/types";
+
+export const products: Product[] = [
+  {
+    id: 1,
+    name: "Wireless Earbuds",
+    description:
+      "High-quality wireless earbuds with noise cancellation technology.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Side+View",
+      "https://placehold.co/600x600.png?text=With+Case",
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Side+View",
+      "https://placehold.co/600x600.png?text=With+Case",
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Side+View",
+      "https://placehold.co/600x600.png?text=With+Case",
+    ],
+    salePrice: 7999,
+    originalPrice: 9999,
+    discount: 20,
+    currentStock: 1,
+    category: "Electronics",
+    rating: 4.5,
+    options: {
+      colour: ["Black", "White", "Blue"],
+      size: ["Small", "Medium", "Large"],
+    },
+    features: [
+      "Active Noise Cancellation",
+      "24-hour battery life",
+      "Bluetooth 5.0",
+      "Water resistant",
+    ],
+    specifications: {
+      "Battery Life": "8 hours (24 with case)",
+      Connectivity: "Bluetooth 5.0",
+      Weight: "5g per earbud",
+    },
+  },
+  {
+    id: 2,
+    name: "Smart Watch",
+    description:
+      "Track your fitness and stay connected with this feature-packed smartwatch.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Different+Bands",
+      "https://placehold.co/600x600.png?text=App+Interface",
+    ],
+    salePrice: 12999,
+    originalPrice: 14999,
+    discount: 13,
+    currentStock: 28,
+    category: "Electronics",
+    rating: 4.3,
+    features: [
+      "Heart rate monitoring",
+      "GPS tracking",
+      "Water resistant to 50m",
+      "7-day battery life",
+    ],
+  },
+  {
+    id: 3,
+    name: "Bluetooth Speaker",
+    description:
+      "Portable speaker with amazing sound quality and long battery life.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Side+View",
+      "https://placehold.co/600x600.png?text=Waterproof",
+    ],
+    salePrice: 5999,
+    originalPrice: 7999,
+    discount: 25,
+    currentStock: 56,
+    category: "Electronics",
+    rating: 4.7,
+    features: [
+      "20-hour playtime",
+      "IPX7 waterproof",
+      "360° sound",
+      "Party pairing mode",
+    ],
+  },
+  {
+    id: 4,
+    name: "Premium T-Shirt",
+    description: "Ultra-soft cotton blend for all-day comfort and durability.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Back",
+    ],
+    salePrice: 1999,
+    originalPrice: 2499,
+    discount: 20,
+    currentStock: 120,
+    category: "Clothing",
+    rating: 4.2,
+    options: {
+      colour: ["Black", "White", "Gray", "Navy", "Red"],
+      size: ["XS", "S", "M", "L", "XL", "XXL"],
+    },
+    features: [
+      "100% organic cotton",
+      "Reinforced stitching",
+      "Pre-shrunk fabric",
+      "Tagless design",
+    ],
+  },
+  {
+    id: 5,
+    name: "Slim Fit Jeans",
+    description: "Modern fit with stretch denim for comfort and style.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Side",
+    ],
+    salePrice: 3999,
+    originalPrice: 4999,
+    discount: 20,
+    currentStock: 85,
+    category: "Clothing",
+    rating: 4.1,
+    options: {
+      colour: ["Blue", "Black", "Gray"],
+      size: ["28", "30", "32", "34", "36", "38"],
+    },
+    features: [
+      "Stretch denim",
+      "Slim fit",
+      "Five-pocket styling",
+      "Reinforced belt loops",
+    ],
+  },
+  {
+    id: 6,
+    name: "Scented Candle",
+    description:
+      "Hand-poured soy wax candle with essential oils for a calming atmosphere.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Lit+Candle",
+      "https://placehold.co/600x600.png?text=Packaging",
+    ],
+    salePrice: 1499,
+    originalPrice: 1999,
+    discount: 25,
+    currentStock: 65,
+    category: "Home",
+    rating: 4.8,
+    features: [
+      "50+ hour burn time",
+      "Natural soy wax",
+      "Essential oil blend",
+      "Reusable container",
+    ],
+  },
+  {
+    id: 7,
+    name: "Throw Pillow",
+    description:
+      "Soft, decorative pillow with removable cover for easy cleaning.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=On+Sofa",
+      "https://placehold.co/600x600.png?text=Cover+Detail",
+    ],
+    salePrice: 2499,
+    originalPrice: 2999,
+    discount: 17,
+    currentStock: 42,
+    category: "Home",
+    rating: 4.4,
+    options: {
+      colour: ["Gray", "Navy", "Cream", "Sage"],
+    },
+    features: [
+      "Removable cover",
+      "Machine washable",
+      "Hypoallergenic filling",
+      "18x18 inch square",
+    ],
+  },
+  {
+    id: 8,
+    name: "Wireless Charger",
+    description: "Fast wireless charging for all your compatible devices.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=With+Phone",
+      "https://placehold.co/600x600.png?text=Multiple+Devices",
+    ],
+    salePrice: 2999,
+    originalPrice: 3999,
+    discount: 25,
+    currentStock: 38,
+    category: "Electronics",
+    rating: 4.2,
+    features: [
+      "15W fast charging",
+      "LED charging indicator",
+      "Non-slip surface",
+      "Universal compatibility",
+    ],
+  },
+  {
+    id: 9,
+    name: "Hooded Sweatshirt",
+    description: "Cozy fleece lining with adjustable hood and kangaroo pocket.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Side",
+    ],
+    salePrice: 3499,
+    originalPrice: 4499,
+    discount: 22,
+    currentStock: 74,
+    category: "Clothing",
+    rating: 4.6,
+    options: {
+      colour: ["Black", "Gray", "Navy", "Burgundy"],
+      size: ["S", "M", "L", "XL", "XXL"],
+    },
+    features: [
+      "80% cotton, 20% polyester",
+      "Kangaroo pocket",
+      "Adjustable drawstring hood",
+      "Ribbed cuffs and hem",
+    ],
+  },
+  {
+    id: 10,
+    name: "Ceramic Mug Set",
+    description:
+      "Handcrafted ceramic mugs, perfect for your morning coffee or tea.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Set+of+4",
+      "https://placehold.co/600x600.png?text=In+Use",
+    ],
+    salePrice: 1999,
+    originalPrice: 2499,
+    discount: 20,
+    currentStock: 53,
+    category: "Home",
+    rating: 4.3,
+    features: [
+      "Set of 4",
+      "Microwave and dishwasher safe",
+      "Comfortable handle",
+      "14oz capacity",
+    ],
+  },
+  {
+    id: 11,
+    name: "Noise Cancelling Headphones",
+    description:
+      "Premium audio experience with industry-leading noise cancellation technology.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Folded",
+      "https://placehold.co/600x600.png?text=With+Case",
+    ],
+    salePrice: 19999,
+    originalPrice: 24999,
+    discount: 20,
+    currentStock: 31,
+    category: "Electronics",
+    rating: 4.9,
+    features: [
+      "Active noise cancellation",
+      "30-hour battery life",
+      "Touch controls",
+      "Built-in microphone",
+    ],
+  },
+  {
+    id: 12,
+    name: "Athletic Shorts",
+    description:
+      "Lightweight, breathable fabric with moisture-wicking technology.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Back",
+    ],
+    salePrice: 2499,
+    originalPrice: 2999,
+    discount: 17,
+    currentStock: 92,
+    category: "Clothing",
+    rating: 4.0,
+    options: {
+      colour: ["Black", "Gray", "Navy", "Red"],
+      size: ["S", "M", "L", "XL"],
+    },
+    features: [
+      "Moisture-wicking fabric",
+      "Elastic waistband",
+      "Zippered pocket",
+      "UPF 50+ protection",
+    ],
+  },
+  {
+    id: 13,
+    name: "Decorative Vase",
+    description:
+      "Elegant ceramic vase to showcase your favorite flowers or as a standalone piece.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=With+Flowers",
+      "https://placehold.co/600x600.png?text=Different+Angle",
+    ],
+    salePrice: 3499,
+    originalPrice: 3999,
+    discount: 13,
+    currentStock: 27,
+    category: "Home",
+    rating: 4.5,
+    features: [
+      "Handcrafted ceramic",
+      "Waterproof interior",
+      "Modern minimalist design",
+      "9 inches tall",
+    ],
+  },
+  {
+    id: 14,
+    name: "Portable Power Bank",
+    description:
+      "Keep your devices charged anywhere with this high-capacity power bank.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=With+Phone",
+      "https://placehold.co/600x600.png?text=Size+Comparison",
+    ],
+    salePrice: 4999,
+    originalPrice: 5999,
+    discount: 17,
+    currentStock: 64,
+    category: "Electronics",
+    rating: 4.4,
+    features: [
+      "20,000mAh capacity",
+      "Dual USB ports",
+      "Fast charging",
+      "LED power indicator",
+    ],
+  },
+  {
+    id: 15,
+    name: "Casual Button-Up Shirt",
+    description:
+      "Versatile button-up that transitions from casual to semi-formal effortlessly.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Back",
+    ],
+    salePrice: 3499,
+    originalPrice: 3999,
+    discount: 13,
+    currentStock: 58,
+    category: "Clothing",
+    rating: 4.2,
+    options: {
+      colour: ["White", "Blue", "Black", "Pink"],
+      size: ["S", "M", "L", "XL", "XXL"],
+    },
+    features: [
+      "100% cotton",
+      "Button-down collar",
+      "Chest pocket",
+      "Machine washable",
+    ],
+  },
+  {
+    id: 16,
+    name: "Bed Sheets",
+    description:
+      "Luxuriously soft sheets with deep pockets to fit mattresses up to 18 inches.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=On+Bed",
+      "https://placehold.co/600x600.png?text=Close+Up",
+    ],
+    salePrice: 5999,
+    originalPrice: 7999,
+    discount: 25,
+    currentStock: 39,
+    category: "Home",
+    rating: 4.7,
+    options: {
+      colour: ["White", "Gray", "Blue", "Beige"],
+      size: ["Twin", "Full", "Queen", "King"],
+    },
+    features: [
+      "400 thread count",
+      "Deep pocket design",
+      "Wrinkle-resistant",
+      "Breathable fabric",
+    ],
+  },
+  {
+    id: 17,
+    name: "Smart Home Hub",
+    description: "Control all your smart home devices from one central hub.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=With+Devices",
+      "https://placehold.co/600x600.png?text=App+Interface",
+    ],
+    salePrice: 8999,
+    originalPrice: 9999,
+    discount: 10,
+    currentStock: 22,
+    category: "Electronics",
+    rating: 4.3,
+    features: [
+      "Voice assistant compatible",
+      "Works with 100+ devices",
+      "Built-in Zigbee hub",
+      "Simple setup",
+    ],
+  },
+  {
+    id: 18,
+    name: "Wool Sweater",
+    description: "Warm, breathable wool blend that's perfect for layering.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Side",
+    ],
+    salePrice: 4999,
+    originalPrice: 5999,
+    discount: 17,
+    currentStock: 47,
+    category: "Clothing",
+    rating: 4.5,
+    options: {
+      colour: ["Gray", "Navy", "Burgundy", "Forest Green"],
+      size: ["S", "M", "L", "XL"],
+    },
+    features: [
+      "80% merino wool, 20% nylon",
+      "Ribbed cuffs and hem",
+      "Classic crew neck",
+      "Machine wash cold",
+    ],
+  },
+  {
+    id: 19,
+    name: "Kitchen Knife Set",
+    description:
+      "Professional-grade knives with ergonomic handles for precision cutting.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Knife+Closeup",
+      "https://placehold.co/600x600.png?text=In+Block",
+    ],
+    salePrice: 7999,
+    originalPrice: 9999,
+    discount: 20,
+    currentStock: 34,
+    category: "Home",
+    rating: 4.8,
+    features: [
+      "5-piece set",
+      "High-carbon stainless steel",
+      "Ergonomic handles",
+      "Includes storage block",
+    ],
+  },
+  {
+    id: 20,
+    name: "Wireless Mouse",
+    description:
+      "Ergonomic design with precise tracking and long battery life.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Side+View",
+      "https://placehold.co/600x600.png?text=With+Laptop",
+    ],
+    salePrice: 2999,
+    originalPrice: 3499,
+    discount: 14,
+    currentStock: 76,
+    category: "Electronics",
+    rating: 4.1,
+    features: [
+      "2.4GHz wireless",
+      "12-month battery life",
+      "1600 DPI sensor",
+      "Ambidextrous design",
+    ],
+  },
+  {
+    id: 21,
+    name: "Lightweight Jacket",
+    description: "Weather-resistant outer shell with lightweight insulation.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Model+Front",
+      "https://placehold.co/600x600.png?text=Model+Back",
+    ],
+    salePrice: 5999,
+    originalPrice: 7999,
+    discount: 25,
+    currentStock: 51,
+    category: "Clothing",
+    rating: 4.4,
+    options: {
+      colour: ["Black", "Navy", "Olive", "Red"],
+      size: ["S", "M", "L", "XL", "XXL"],
+    },
+    features: [
+      "Water-resistant shell",
+      "Packable design",
+      "Zippered pockets",
+      "Adjustable cuffs",
+    ],
+  },
+  {
+    id: 22,
+    name: "Bath Towel Set",
+    description:
+      "Plush, absorbent cotton towels that get softer with each wash.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Set+of+4",
+      "https://placehold.co/600x600.png?text=Close+Up",
+    ],
+    salePrice: 3999,
+    originalPrice: 4999,
+    discount: 20,
+    currentStock: 43,
+    category: "Home",
+    rating: 4.6,
+    features: [
+      "Set of 4 (2 bath, 2 hand)",
+      "600 GSM weight",
+      "Oeko-Tex certified",
+      "Machine washable",
+    ],
+  },
+  {
+    id: 23,
+    name: "Mechanical Keyboard",
+    description: "Tactile typing experience with customizable RGB lighting.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Backlit",
+      "https://placehold.co/600x600.png?text=With+Mouse",
+    ],
+    salePrice: 8999,
+    originalPrice: 9999,
+    discount: 10,
+    currentStock: 29,
+    category: "Electronics",
+    rating: 4.7,
+    features: [
+      "Cherry MX switches",
+      "RGB backlighting",
+      "N-key rollover",
+      "Braided cable",
+    ],
+  },
+  {
+    id: 24,
+    name: "Performance Socks",
+    description: "Cushioned sole and arch support for all-day comfort.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Pair",
+      "https://placehold.co/600x600.png?text=Close+Up",
+    ],
+    salePrice: 1499,
+    originalPrice: 1999,
+    discount: 25,
+    currentStock: 112,
+    category: "Clothing",
+    rating: 4.0,
+    options: {
+      colour: ["Black", "White", "Gray", "Multi"],
+      size: ["S", "M", "L"],
+    },
+    features: [
+      "Moisture-wicking",
+      "Cushioned footbed",
+      "Arch support",
+      "Seamless toe",
+    ],
+  },
+  {
+    id: 25,
+    name: "Wall Art Print",
+    description: "Gallery-quality print to add personality to any room.",
+    imageUrl: "https://placehold.co/300x300.png",
+    images: [
+      "https://placehold.co/600x600.png",
+      "https://placehold.co/600x600.png?text=Framed",
+      "https://placehold.co/600x600.png?text=In+Room",
+    ],
+    salePrice: 2999,
+    originalPrice: 3999,
+    discount: 25,
+    currentStock: 37,
+    category: "Home",
+    rating: 4.5,
+    features: [
+      "Archival quality print",
+      "Multiple size options",
+      "Ready to hang",
+      "Fade-resistant inks",
+    ],
+  },
+];
+
+// Get a single product by ID
+export function getProductById(id: number): Product | undefined {
+  return products.find((product) => product.id === id);
+}
+
+// Get products by category
+export function getProductsByCategory(category: string): Product[] {
+  return products.filter((product) => product.category === category);
+}
+
+// Get featured products (e.g., products with a discount)
+export function getFeaturedProducts(limit = 4): Product[] {
+  return products
+    .filter((product) => product.discount !== undefined && product.discount > 0)
+    .sort((a, b) => (b.discount || 0) - (a.discount || 0))
+    .slice(0, limit);
+}
+
+// Search products by name or description
+export function searchProducts(query: string): Product[] {
+  const lowercaseQuery = query.toLowerCase();
+  return products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(lowercaseQuery) ||
+      product.description.toLowerCase().includes(lowercaseQuery)
+  );
+}

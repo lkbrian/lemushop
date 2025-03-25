@@ -1,103 +1,415 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRight,
+  //  ShoppingBag
+  Store,
+  Shield,
+  BarChart,
+} from "lucide-react";
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen flex flex-col">
+      {/* Navbar */}
+      {/* <nav className="bg-gray-900 text-white p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-2xl font-semibold">Lemupay</div>
+          <div className="hidden md:flex space-x-6">
+            <Link href="/" className="hover:text-gray-400">
+              Home
+            </Link>
+            <Link href="/shop" className="hover:text-gray-400">
+              Shop
+            </Link>
+            <Link href="#marketplace" className="hover:text-gray-400">
+              Marketplace
+            </Link>
+            <Link href="#storefront" className="hover:text-gray-400">
+              Storefront
+            </Link>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/cart" className="hover:text-gray-400">
+              <ShoppingBag className="h-5 w-5" />
+            </Link>
+            <Button size="sm" className="rounded-full" asChild>
+              <Link href="/register">Join Now</Link>
+            </Button>
+            <button className="md:hidden focus:outline-none">
+              <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </nav> */}
+
+      {/* Hero Section */}
+      <section className="bg-white py-16 md:py-24 flex-1">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-gray-900">
+              Unlock Your Online Business Potential with Lemupay
+            </h1>
+            <p className="text-xl mb-8 text-gray-600">
+              Our exclusive marketplace for verified users offers a secure
+              environment to showcase your products and attract targeted
+              customers. Start your entrepreneurial journey with ease using
+              Lemupay&apos;s storefront option to list products, receive
+              payments, and control your sales.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="rounded-full" asChild>
+                <Link href="/register">
+                  Join Us Today <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full"
+                asChild
+              >
+                <Link href="/shop">Explore Marketplace</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50" id="marketplace">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-4 text-center">
+            Elevate Your Sales with Lemupay
+          </h2>
+          <p className="text-xl mb-12 text-center text-gray-600 max-w-3xl mx-auto">
+            Transform your entrepreneurial ambitions into reality with our
+            comprehensive platform designed for business growth.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
+                <Shield className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">
+                Marketplace for Verified Users
+              </h3>
+              <p className="text-gray-600">
+                Experience our premium Marketplace, designed for verified users
+                to connect securely with eager buyers, enhancing authenticity
+                and quality in every transaction.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
+                <Store className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">
+                Empower Your Storefront
+              </h3>
+              <p className="text-gray-600">
+                Launch your own storefront effortlessly, showcasing your
+                products and receiving payments instantly while managing sales
+                at your convenience.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
+                <BarChart className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">
+                Join Our Thriving Ecosystem
+              </h3>
+              <p className="text-gray-600">
+                Whether you&apos;re an experienced seller or just starting,
+                Lemupay provides the essential tools to thrive, embracing your
+                entrepreneurial dreams with confidence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-4 text-center">
+            Empower Your Business with Lemupay
+          </h2>
+          <p className="text-xl mb-12 text-center text-gray-600 max-w-3xl mx-auto">
+            Unlock the potential of our Marketplace and Storefront to grow your
+            online presence and revenues.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="border rounded-lg p-8">
+              <h3 className="text-xl font-bold mb-2">Storefront</h3>
+              <div className="flex items-baseline mb-4">
+                <span className="text-3xl font-bold">Free</span>
+                <span className="text-gray-500 ml-2">/ for all users</span>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Easily set up your own online shop and receive payments
+                directly.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Create Your Shop
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  List Products Easily
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Direct Payment Withdrawal
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Simple Management Tools
+                </li>
+              </ul>
+              <Button className="w-full" variant="outline">
+                Start Your Free Storefront
+              </Button>
+            </div>
+
+            <div className="border rounded-lg p-8 bg-primary/5 border-primary relative">
+              <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                POPULAR
+              </div>
+              <h3 className="text-xl font-bold mb-2">Marketplace</h3>
+              <div className="flex items-baseline mb-4">
+                <span className="text-3xl font-bold">$29</span>
+                <span className="text-gray-500 ml-2">/ month</span>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Join a secure space to connect with premium customers.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Access to Verified Customers
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Enhanced Security for Transactions
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Showcase Unique Products
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  24/7 Customer Support
+                </li>
+              </ul>
+              <Button className="w-full">Explore the Marketplace</Button>
+            </div>
+
+            <div className="border rounded-lg p-8">
+              <h3 className="text-xl font-bold mb-2">Premium Plan</h3>
+              <div className="flex items-baseline mb-4">
+                <span className="text-3xl font-bold">$149</span>
+                <span className="text-gray-500 ml-2">/ month</span>
+              </div>
+              <p className="text-gray-600 mb-6">
+                For serious sellers looking to maximize potential.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Unlimited Access to Features
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  200 GB Storage Space
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Unlimited User Accounts
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    className="h-5 w-5 text-green-500 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Dedicated Support Team
+                </li>
+              </ul>
+              <Button className="w-full" variant="outline">
+                Upgrade to Premium Plan
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">
+            Unleash Your Business Potential with Lemupay
+          </h2>
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Our Marketplace is exclusively designed for verified users, offering
+            a secure and dynamic platform to showcase your products. Connect
+            with a targeted audience that values quality and authenticity.
+          </p>
+          <Button size="lg" className="rounded-full" asChild>
+            <Link href="/register">Get Started Today</Link>
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }
