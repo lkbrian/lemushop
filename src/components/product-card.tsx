@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/types";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useStore } from "@/context/store-context";
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,10 @@ interface ProductCardProps {
 export function ProductCard({ product, onQuickView }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showQuickView] = useState(false);
+  const { state } = useStore();
+
+  // Destructure the state
+  const { store } = state;
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -46,10 +51,9 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
   };
 
   const handleCardClick = (event: React.MouseEvent) => {
-    if (showQuickView) {
-      event.preventDefault(); // If quick view is shown, don't navigate
+    if (showQuickView && product.currentStock === 0) {
+      event.preventDefault();
     }
-    // Otherwise, let the link handle the navigation
   };
 
   return (
@@ -66,20 +70,26 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
           alt={product.name}
           fill
           className="object-cover transition-transform group-hover:scale-105"
+          sizes="100%"
+          priority
         />
       </div>
 
-      <div className="p-4 pb-0.5">
+      <div className={`p-4 pb-0.5 ${isMobile && "mb-10"}`}>
         <h3 className="font-medium text-sm line-clamp-1">{product.name}</h3>
         <p className="text-gray-500 text-xs mt-1 line-clamp-2">
           {product.description}
         </p>
 
         <div className="flex items-center justify-between mt-2">
-          <p className="font-bold">${(product.salePrice / 100).toFixed(2)}</p>
+          <p className="font-bold">
+            {store?.currencySymbol}
+            {(product.salePrice / 100).toFixed(2)}
+          </p>
           {product.originalPrice > product.salePrice && (
             <p className="text-xs text-gray-500 line-through">
-              ${(product.originalPrice / 100).toFixed(2)}
+              {store?.currencySymbol}
+              {(product.originalPrice / 100).toFixed(2)}
             </p>
           )}
         </div>
@@ -88,11 +98,11 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
       {/* Mobile: Always show Quick View button */}
       {isMobile && (
         <Button
-          className={` ${
+          className={`absolute  bottom-0 left-0 right-0 ${
             product.currentStock === 0 ? "cursor-not-allowed" : "cursor-pointer"
-          } w-full rounded-none`}
+          } w-full rounded-none shop--button`}
           onClick={handleQuickViewClick}
-          disabled={product.currentStock === 0}
+          // disabled={product.currentStock === 0}
         >
           Quick View
         </Button>
@@ -103,9 +113,9 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
         <Button
           className={`absolute ${
             product.currentStock === 0 ? "cursor-not-allowed" : "cursor-pointer"
-          } bottom-0 left-0 right-0 translate-y-full opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 rounded-none`}
+          } bottom-0 left-0 right-0 translate-y-full opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 rounded-none shop--button`}
           onClick={handleQuickViewClick}
-          disabled={product.currentStock === 0}
+          // disabled={product.currentStock === 0}
         >
           Quick View
         </Button>

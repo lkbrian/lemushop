@@ -5,20 +5,42 @@ import { ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/cart-context";
+import { useStore } from "@/context/store-context";
+import { Skeleton } from "./ui/skeleton";
 
 export function Header() {
   const { numberOfCartItems } = useCart();
+  const { state } = useStore();
 
+  // Destructure the state
+  const { store, loading } = state;
+  console.log("header", store);
+  // if (store) {
+  //   document.documentElement.style.setProperty(
+  //     "--shop-theme-color",
+  //     store?.customColor
+  //   );
+  // }
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b font-['Poppins']">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex flex-col">
-          <Link href="/" className="text-xl font-bold">
-            EcoShop
-          </Link>
-          <span className="text-xs text-gray-500 -mt-1">
-            Quality products, exceptional prices
-          </span>
+          {loading && (
+            <>
+              <Skeleton className="h-6 w-[250px]" />
+              <Skeleton className="h-4 w-[450px]" />
+            </>
+          )}
+          {!loading && (
+            <>
+              <Link href="/" className="text-xl font-bold">
+                {store?.storeName}
+              </Link>
+              <span className="text-xs text-gray-500 -mt-1 line-clamp-1">
+                {store?.description}
+              </span>
+            </>
+          )}
         </div>
 
         <div className="flex items-center">

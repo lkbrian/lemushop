@@ -1,5 +1,6 @@
-// contexts/store-context.tsx
+"use client";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { storeApi } from "../lib/api"; // Assuming you are using storeApi to fetch data
 
 // Define proper interface for store data
 interface StoreData {
@@ -65,24 +66,38 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchStoreDetails = async () => {
       try {
-        dispatch({ type: "FETCH_START" });
-
+        // Check if the store data already exists in sessionStorage
         const cachedStore = sessionStorage.getItem("storeDetails");
         if (cachedStore) {
+          // If it exists, parse and dispatch the data without making the API call
           dispatch({
             type: "FETCH_SUCCESS",
             payload: JSON.parse(cachedStore) as StoreData,
           });
-          return;
+          const store = JSON.parse(cachedStore) as StoreData;
+          document.documentElement.style.setProperty(
+            "--shop-theme-color",
+            store?.customColor
+          );
+          return; // Exit the function as data is already available
         }
 
-        const response = await fetch("/api/store-details");
-        const data: StoreData = await response.json();
+        // If no data is cached, dispatch FETCH_START and make the API call
+        dispatch({ type: "FETCH_START" });
 
+        // Fetch the store details from the API
+        const data = await storeApi.getStoreInfo();
+
+        // Cache the store data in sessionStorage
         sessionStorage.setItem("storeDetails", JSON.stringify(data));
+        document.documentElement.style.setProperty(
+          "--shop-theme-color",
+          data?.customColor
+        );
+        // Dispatch the fetched data
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
-        // Proper error type handling
+        // Handle any errors and dispatch them
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -91,6 +106,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
+    // Fetch store details when the component mounts
     fetchStoreDetails();
   }, []);
 

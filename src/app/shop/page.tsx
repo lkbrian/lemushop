@@ -2,8 +2,8 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { products } from "@/lib/data";
+import { useEffect, useState } from "react";
+// import { products } from "@/lib/data";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -17,19 +17,40 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, X } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductDrawer } from "@/components/product-drawer";
-import type { Product } from "@/lib/types";
+import type { Product, ProductList } from "@/lib/types";
+import { storeApi } from "@/lib/api";
+import { ProductCardSkeleton } from "@/components/product-card-skeleton";
 
 export default function ShopPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("featured");
+  const [sortBy] = useState<string>("featured");
+  const [products, setProducts] = useState<Product[]>([]); // State for products
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
 
-  console.log(setSortBy);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response: ProductList = await storeApi.getStoreProducts(1);
+        setProducts(response.content); // Accessing the content array of products
+      } catch (err) {
+        setError("Failed to fetch products");
+        console.log(error);
+        console.error(err);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
+    };
+
+    fetchProducts(); // Call the fetch function when component mounts
+  }, [error]);
+
   // Get unique categories for filter
   const categories = Array.from(
-    new Set(products.map((p) => p.category).filter(Boolean))
+    new Set(products?.map((p) => p.category).filter(Boolean))
   ) as string[];
 
   // Filter products based on search query and categories
@@ -169,7 +190,12 @@ export default function ShopPage() {
 
       {/* Products Grid */}
       <div className="flex-1">
-        {sortedProducts.length === 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {loading &&
+            sortedProducts.length === 0 &&
+            [1, 2, 3, 4, 5].map((index) => <ProductCardSkeleton key={index} />)}
+        </div>
+        {!loading && sortedProducts.length === 0 ? (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold mb-2">No products found</h2>
             <p className="text-gray-500 mb-4">
@@ -179,13 +205,14 @@ export default function ShopPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {sortedProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onQuickView={handleQuickView}
-              />
-            ))}
+            {!loading &&
+              sortedProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onQuickView={handleQuickView}
+                />
+              ))}
           </div>
         )}
       </div>

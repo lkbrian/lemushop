@@ -110,6 +110,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --shop-theme-color: red; /* Default theme color if none is set */
 }
 
 @layer base {
@@ -141,4 +142,9 @@
 
 .scrollbar::-webkit-scrollbar-track {
   border-radius: 4px;
+}
+
+.shop--button {
+  background-color: var(--shop-theme-color);
+  color: white;
 }

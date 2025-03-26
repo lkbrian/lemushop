@@ -59,3 +59,44 @@ export interface Order {
   };
   items: CartItem[];
 }
+
+export interface storeProduct {
+  id: number;
+  productId: number;
+  storeId: number;
+  name: string;
+  imageUrl: string;
+  productTypeId: number;
+  productCategoryId: number;
+  description: string;
+  originalPrice: number;
+  salePrice: number;
+  originalStock: number;
+  currentStock: number;
+}
+
+interface Pageable {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+
+interface Sort {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+
+export interface ProductList {
+  content: storeProduct[];
+  pageable: Pageable;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: Sort;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
