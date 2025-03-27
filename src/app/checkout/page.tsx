@@ -1,5 +1,4 @@
 "use client";
-import { Suspense } from "react";
 
 import { CardForm, type CardFormValues } from "@/components/card-form";
 import { MpesaForm, type MpesaFormValues } from "@/components/mpesa-form";
@@ -27,16 +26,18 @@ import {
 import { formatPayload } from "@/lib/utils";
 import { CheckCircle2, CreditCard, Phone } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+// import { useRouter } from "next/router";
+import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 type CheckoutStep = "personal" | "payment";
 type PaymentMethod = "mpesa" | "card";
 
-export default function CheckoutPage() {
+function CheckoutPage() {
   const searchParams = useSearchParams();
   const buyNow = searchParams.get("buyNow");
+  // const router = useRouter()
   const { state } = useStore();
   const { store } = state;
   const [currentStep, setCurrentStep] = useState<CheckoutStep>("personal");
@@ -311,7 +312,6 @@ export default function CheckoutPage() {
   const renderPaymentMethodSelector = () => {
     return (
       <div className="mb-6">
-        <Suspense fallback={<div>Loading...</div>}></Suspense>
         <div className="grid grid-cols-2 gap-4 items-start sm:w-full md:w-[80%]">
           <div
             className={`border-2 py-3 px-2 rounded-md cursor-pointer ${
@@ -418,5 +418,12 @@ export default function CheckoutPage() {
         </Card>
       </div>
     </div>
+  );
+}
+export default function CheckoutPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckoutPage />
+    </Suspense>
   );
 }
