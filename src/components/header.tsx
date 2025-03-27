@@ -55,10 +55,14 @@ export function Header() {
           <div className="px-4">|</div>
 
           <Link href="/cart">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
+            <Button
+              variant="ghost"
+              // size="icon"
+              className="relative cursor-pointer"
+            >
+              <ShoppingCart size={15} className="h-5 w-5" />
               {numberOfCartItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 bg-theme-color text-primary-foreground text-[8px] rounded-full h-4.5 w-4.5 flex items-center justify-center">
                   {numberOfCartItems}
                 </span>
               )}

@@ -1,5 +1,5 @@
 "use client";
-import { Poppins } from "next/font/google";
+import { Outfit, Poppins } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -7,9 +7,15 @@ import { CartProvider } from "@/context/cart-context";
 import { StoreProvider, useStore } from "@/context/store-context";
 // import { useEffect } from "react";
 import Head from "next/head";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
@@ -37,7 +43,7 @@ export default function RootLayout({
   // }, [store]);
 
   return (
-    <html lang="en">
+    <html lang="en" className={outfit.className}>
       <Head>
         <title>
           {storeName} - {storeTag}
@@ -54,6 +60,7 @@ export default function RootLayout({
           <CartProvider>
             <Header />
             <main className={`flex-1 w-full pt-16`}>{children}</main>
+            <Toaster />
             <Footer />
           </CartProvider>
         </StoreProvider>

@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { storeApi } from "../lib/api"; // Assuming you are using storeApi to fetch data
+import { Category } from "@/lib/types";
 
 // Define proper interface for store data
 interface StoreData {
@@ -10,7 +11,7 @@ interface StoreData {
   description: string;
   storeCategory: string;
   welcomeMessage: string;
-  phoneNumber: string;
+  mobileNumber: string;
   email: string;
   currencyId: number;
   currencyName: string;
@@ -20,6 +21,7 @@ interface StoreData {
   tiktok: string;
   customColor: string;
   logo: string;
+  categories?: Category[];
 }
 
 interface StoreState {

@@ -16,8 +16,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCart } from "@/context/cart-context";
-import { getProductById } from "@/lib/data";
 import type { Product } from "@/lib/types";
+import { useStore } from "@/context/store-context";
+import { storeApi } from "@/lib/api";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -32,42 +33,76 @@ export default function ProductPage() {
   }>({});
 
   const { addItem } = useCart();
-
+  const { state } = useStore();
+  const { store } = state;
   useEffect(() => {
-    const fetchProduct = async () => {
+    async function getProductById() {
+      setLoading(true);
+      const id = Number(params?.id);
       try {
-        // Get product by ID using the params directly
-        const productId = Number(params?.id);
-        const foundProduct = getProductById(productId);
-
-        if (foundProduct) {
-          setProduct(foundProduct);
-
-          // Set default options if available
-          const defaultOptions: { colour?: string; size?: string } = {};
-          if (
-            foundProduct.options?.colour &&
-            foundProduct.options.colour.length > 0
-          ) {
-            defaultOptions.colour = foundProduct.options.colour[0];
-          }
-          if (
-            foundProduct.options?.size &&
-            foundProduct.options.size.length > 0
-          ) {
-            defaultOptions.size = foundProduct.options.size[0];
-          }
-          setSelectedOptions(defaultOptions);
+        if (id !== undefined) {
+          const product = await storeApi.getSingleProduct(id);
+          setProduct(product);
         }
       } catch (error) {
-        console.error("Error fetching product:", error);
+        console.log(error);
       } finally {
         setLoading(false);
       }
-    };
+    }
+    getProductById();
+  }, [params?.id]);
 
-    fetchProduct();
-  }, [params.id]);
+  useEffect(() => {
+    if (product) {
+      setQuantity(1);
+
+      // Set default options if available
+      const defaultOptions: { colour?: string; size?: string } = {};
+      if (product.options?.colour && product.options.colour.length > 0) {
+        defaultOptions.colour = product.options.colour[0];
+      }
+      if (product.options?.size && product.options.size.length > 0) {
+        defaultOptions.size = product.options.size[0];
+      }
+      setSelectedOptions(defaultOptions);
+    }
+  }, [product]);
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       // Get product by ID using the params directly
+  //       const productId = Number(params?.id);
+  //       const foundProduct = getProductById(productId);
+
+  //       if (foundProduct) {
+  //         setProduct(foundProduct);
+
+  //         // Set default options if available
+  //         const defaultOptions: { colour?: string; size?: string } = {};
+  //         if (
+  //           foundProduct.options?.colour &&
+  //           foundProduct.options.colour.length > 0
+  //         ) {
+  //           defaultOptions.colour = foundProduct.options.colour[0];
+  //         }
+  //         if (
+  //           foundProduct.options?.size &&
+  //           foundProduct.options.size.length > 0
+  //         ) {
+  //           defaultOptions.size = foundProduct.options.size[0];
+  //         }
+  //         setSelectedOptions(defaultOptions);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching product:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProduct();
+  // }, [params.id]);
 
   const handleQuantityChange = (value: number) => {
     if (product && value >= 1 && value <= product.currentStock) {
@@ -95,16 +130,16 @@ export default function ProductPage() {
   };
 
   const handleBuyNow = () => {
-    if (!product) return;
+    if (!product) return; // Ensure the product exists
 
-    // Add to cart and navigate to checkout
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        ...product,
-        selectedOptions,
-      });
-    }
-    router.push("/checkout");
+    const updatedProduct = {
+      ...product,
+      quantity,
+      selectedOptions,
+    };
+    sessionStorage.setItem("buyItem", JSON.stringify(updatedProduct));
+    sessionStorage.setItem("fromBuyNow", JSON.stringify(true));
+    router.push("/checkout?buyNow=true");
   };
 
   if (loading) {
@@ -148,7 +183,9 @@ export default function ProductPage() {
           The product you&apos;re looking for doesn&apos;t exist or has been
           removed.
         </p>
-        <Button onClick={() => router.push("/shop")}>Return to Shop</Button>
+        <Button className="bg-theme-color" onClick={() => router.push("/")}>
+          Return to Shop
+        </Button>
       </div>
     );
   }
@@ -168,7 +205,7 @@ export default function ProductPage() {
               }
               alt={product.name}
               fill
-              className="object-cover rounded-md"
+              className="object-contain rounded-md"
               priority
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
             />
@@ -229,15 +266,17 @@ export default function ProductPage() {
           {/* Price - adjusted text size for mobile */}
           <div className="flex items-baseline mb-4 sm:mb-6">
             <span className="text-2xl sm:text-3xl font-bold">
-              ${(product.salePrice / 100).toFixed(2)}
+              {store?.currencySymbol + " "}
+              {(product.salePrice / 100).toFixed(2)}
             </span>
             {product.originalPrice > product.salePrice && (
               <>
                 <span className="ml-2 text-sm sm:text-base text-gray-500 line-through">
-                  ${(product.originalPrice / 100).toFixed(2)}
+                  {store?.currencySymbol + " "}
+                  {(product.originalPrice / 100).toFixed(2)}
                 </span>
                 <span className="ml-2 text-sm sm:text-base text-green-600 font-medium">
-                  Save $
+                  Save{store?.currencySymbol + " "}
                   {((product.originalPrice - product.salePrice) / 100).toFixed(
                     2
                   )}
@@ -357,7 +396,7 @@ export default function ProductPage() {
           {/* Action Buttons - stacked on mobile */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
             <Button
-              className="w-full sm:flex-1 rounded-full cursor-pointer"
+              className="w-full sm:flex-1 h-10  bg-theme-color rounded-full cursor-pointer"
               size="sm"
               onClick={handleBuyNow}
               disabled={product.currentStock === 0}
@@ -366,9 +405,12 @@ export default function ProductPage() {
             </Button>
             <Button
               variant="outline"
-              className="w-full sm:flex-1 rounded-full cursor-pointer"
+              className="w-full sm:flex-1 h-10 rounded-full cursor-pointer"
               size="sm"
-              onClick={handleAddToCart}
+              onClick={() => {
+                handleAddToCart();
+                sessionStorage.setItem("fromBuyNow", JSON.stringify(true));
+              }}
               disabled={product.currentStock === 0}
             >
               <ShoppingCart className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />

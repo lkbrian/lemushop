@@ -16,25 +16,45 @@ import { Label } from "@/components/ui/label";
 import { useCart } from "@/context/cart-context";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/lib/types";
+import { toast } from "sonner";
+import { storeApi } from "@/lib/api";
+import { useStore } from "@/context/store-context";
 
 interface ProductDrawerProps {
-  product: Product | null;
+  id: number | string | undefined;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function ProductDrawer({
-  product,
-  open,
-  onOpenChange,
-}: ProductDrawerProps) {
+export function ProductDrawer({ id, open, onOpenChange }: ProductDrawerProps) {
   const router = useRouter();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<{
     colour?: string;
     size?: string;
   }>({});
+
+  const { state } = useStore();
+  const { store } = state;
+  useEffect(() => {
+    async function getProductById(id: number | string | undefined) {
+      setLoading(true);
+      try {
+        if (id !== undefined) {
+          const product = await storeApi.getSingleProduct(id);
+          setProduct(product);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getProductById(id);
+  }, [id]);
 
   // Reset quantity and selected options when product changes
   useEffect(() => {
@@ -78,7 +98,19 @@ export function ProductDrawer({
   };
 
   const images = product.images || (product.imageUrl ? [product.imageUrl] : []);
+  const handleBuyNow = () => {
+    if (!product) return; // Ensure the product exists
 
+    const updatedProduct = {
+      ...product,
+      quantity,
+      selectedOptions,
+    };
+    sessionStorage.setItem("buyItem", JSON.stringify(updatedProduct));
+    sessionStorage.setItem("fromBuyNow", JSON.stringify(true));
+    router.push("/checkout?buyNow=true");
+    onOpenChange(false);
+  };
   return (
     <>
       {/* Overlay */}
@@ -104,33 +136,117 @@ export function ProductDrawer({
           >
             <X className="w-5 h-5" />
           </button>
-
-          <div className="flex flex-col h-full">
-            {/* Product Image - Smaller and fixed height */}
-            {images.length > 0 && (
-              <div className="relative h-[350px] mt-4 w-[96%]">
-                <Image
-                  src={images[0] || "/placeholder.s"}
-                  alt={product.name}
-                  fill
-                  className="object-contain"
-                  sizes="100%"
-                />
+          {loading && (
+            <div className="flex flex-col h-full">
+              {/* Product Image Skeleton */}
+              <div className="relative h-[350px] mt-4 w-[96%] bg-gray-200 rounded-lg animate-pulse">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg
+                    className="w-12 h-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
               </div>
-            )}
 
-            {/* Product Details */}
-            <div className="p-5 flex-1 overflow-auto">
-              {/* Title and Rating */}
-              <div className="mb-3">
-                <h2 className="text-lg font-bold">{product.name}</h2>
-                {product.rating && (
-                  <div className="flex items-center mt-1">
+              {/* Product Details Skeleton */}
+              <div className="p-5 flex-1 overflow-auto">
+                {/* Title and Rating Skeleton */}
+                <div className="mb-3 space-y-2">
+                  <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="flex items-center space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-3.5 h-3.5 bg-gray-200 rounded-full animate-pulse"
+                      ></div>
+                    ))}
+                    <div className="h-3 w-12 bg-gray-200 rounded animate-pulse ml-1"></div>
+                  </div>
+                </div>
+
+                {/* Price & Stock Skeleton */}
+                <div className="flex justify-between items-center mb-3">
+                  <div className="space-y-1">
+                    <div className="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-3 w-12 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                  <div className="h-3 w-20 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+
+                {/* Description Skeleton */}
+                <div className="mb-4 space-y-2">
+                  <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-3 w-4/5 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-3 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+
+                {/* Options Skeleton */}
+                <div className="grid grid-cols-2 gap-3 mb-5">
+                  <div className="space-y-1.5">
+                    <div className="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-9 w-full bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-9 w-full bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+
+                {/* Quantity Skeleton */}
+                <div className="mb-5 space-y-1.5">
+                  <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="flex items-center">
+                    <div className="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-5 w-6 bg-gray-200 rounded animate-pulse mx-3"></div>
+                    <div className="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions Skeleton */}
+              <div className="p-5 border-t">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          )}
+          {!loading && (
+            <div className="flex flex-col h-full">
+              {/* Product Image - Smaller and fixed height */}
+              {images.length > 0 && (
+                <div className="relative h-[350px] mt-4 w-[96%]">
+                  <Image
+                    src={images[0] || "/placeholder.s"}
+                    alt={product.name}
+                    fill
+                    className="object-contain"
+                    sizes="100%"
+                  />
+                </div>
+              )}
+
+              {/* Product Details */}
+              <div className="p-5 flex-1 overflow-auto">
+                {/* Title and Rating */}
+                <div className="mb-3">
+                  <h2 className="text-lg font-bold">{product.name}</h2>
+                  <div className="flex items-center mt-1 sm:mt-2 mb-3 sm:mb-4">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
                         <svg
                           key={i}
-                          className={`w-3.5 h-3.5 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${
                             i < Math.floor(product.rating || 0)
                               ? "text-yellow-400"
                               : "text-gray-300"
@@ -142,173 +258,169 @@ export function ProductDrawer({
                         </svg>
                       ))}
                     </div>
-                    <span className="ml-1 text-xs text-gray-500">
+                    <span className="ml-1 sm:ml-2 text-sm sm:text-base text-gray-600">
                       {product.rating} out of 5
                     </span>
                   </div>
-                )}
-              </div>
-
-              {/* Price & Stock */}
-              <div className="flex justify-between items-center mb-3">
-                <div>
-                  <p className="text-xl font-bold">
-                    ${(product.salePrice / 100).toFixed(2)}
-                  </p>
-                  {product.originalPrice > product.salePrice && (
-                    <p className="text-xs text-gray-500 line-through">
-                      ${(product.originalPrice / 100).toFixed(2)}
-                    </p>
-                  )}
                 </div>
-                <p className="text-xs text-gray-500">
-                  {product.currentStock > 0 ? (
-                    <span className="text-green-600">
-                      {product.currentStock} in stock
-                    </span>
-                  ) : (
-                    <span className="text-red-600">Out of stock</span>
-                  )}
-                </p>
-              </div>
 
-              {/* Description - Shorter with max height */}
-              <div className="mb-4">
-                <p className="text-sm text-gray-700 line-clamp-3">
-                  {product.description}
-                </p>
-              </div>
+                {/* Price & Stock */}
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <p className="text-xl font-bold">
+                      {store?.currencySymbol + " "}
+                      {(product.salePrice / 100).toFixed(2)}
+                    </p>
+                    {product.originalPrice > product.salePrice && (
+                      <p className="text-xs text-gray-500 line-through">
+                        ${(product.originalPrice / 100).toFixed(2)}
+                      </p>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {product.currentStock > 0 ? (
+                      <span className="text-green-600">
+                        {product.currentStock} in stock
+                      </span>
+                    ) : (
+                      <span className="text-red-600">Out of stock</span>
+                    )}
+                  </p>
+                </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {product.options?.colour &&
-                  product.options.colour.length > 0 && (
+                {/* Description - Shorter with max height */}
+                <div className="mb-4">
+                  <p className="text-sm text-gray-700 line-clamp-3">
+                    {product.description}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {product.options?.colour &&
+                    product.options.colour.length > 0 && (
+                      <div className="mb-4">
+                        <Label
+                          htmlFor="color"
+                          className="block text-sm font-medium mb-1.5"
+                        >
+                          Color
+                        </Label>
+                        <Select
+                          value={selectedOptions.colour || ""}
+                          onValueChange={(value) =>
+                            handleOptionChange("color", value)
+                          }
+                        >
+                          <SelectTrigger id="color" className="h-9 w-full">
+                            <SelectValue placeholder="Select color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[...new Set(product.options.colour)].map(
+                              (color) => (
+                                <SelectItem key={color} value={color}>
+                                  {color}
+                                </SelectItem>
+                              )
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  {product.options?.size && product.options.size.length > 0 && (
                     <div className="mb-4">
                       <Label
-                        htmlFor="color"
+                        htmlFor="size"
                         className="block text-sm font-medium mb-1.5"
                       >
-                        Color
+                        Size
                       </Label>
                       <Select
-                        value={selectedOptions.colour || ""}
+                        value={selectedOptions.size || ""}
                         onValueChange={(value) =>
-                          handleOptionChange("color", value)
+                          handleOptionChange("size", value)
                         }
                       >
-                        <SelectTrigger id="color" className="h-9 w-full">
-                          <SelectValue placeholder="Select color" />
+                        <SelectTrigger id="size" className="h-9 w-full">
+                          <SelectValue placeholder="Select size" />
                         </SelectTrigger>
                         <SelectContent>
-                          {product.options.colour.map((color) => (
-                            <SelectItem key={color} value={color}>
-                              {color}
+                          {[...new Set(product.options.size)].map((size) => (
+                            <SelectItem key={size} value={size}>
+                              {size}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                   )}
-                {product.options?.size && product.options.size.length > 0 && (
-                  <div className="mb-4">
-                    <Label
-                      htmlFor="size"
-                      className="block text-sm font-medium mb-1.5"
+                </div>
+
+                {/* Quantity */}
+                <div className="mb-5">
+                  <Label
+                    htmlFor="quantity"
+                    className="block text-sm font-medium mb-1.5"
+                  >
+                    Quantity
+                  </Label>
+                  <div className="flex items-center">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      disabled={quantity <= 1}
+                      className="h-8 w-8"
                     >
-                      Size
-                    </Label>
-                    <Select
-                      value={selectedOptions.size || ""}
-                      onValueChange={(value) =>
-                        handleOptionChange("size", value)
-                      }
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <span className="mx-3 w-6 text-center text-sm">
+                      {quantity}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                      disabled={quantity >= product.currentStock}
+                      className="h-8 w-8"
                     >
-                      <SelectTrigger id="size" className="h-9 w-full">
-                        <SelectValue placeholder="Select size" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {product.options.size.map((size) => (
-                          <SelectItem key={size} value={size}>
-                            {size}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <Plus className="h-3 w-3" />
+                    </Button>
                   </div>
-                )}
+                </div>
               </div>
 
-              {/* Quantity */}
-              <div className="mb-5">
-                <Label
-                  htmlFor="quantity"
-                  className="block text-sm font-medium mb-1.5"
-                >
-                  Quantity
-                </Label>
-                <div className="flex items-center">
+              {/* Actions - Fixed at bottom */}
+              <div className="p-5 border-t">
+                <div className="grid grid-cols-2 gap-3">
                   <Button
+                    className="rounded-full h-10 cursor-pointer"
                     variant="outline"
-                    size="icon"
-                    onClick={() => handleQuantityChange(quantity - 1)}
-                    disabled={quantity <= 1}
-                    className="h-8 w-8"
+                    onClick={() => {
+                      for (let i = 0; i < quantity; i++) {
+                        addItem({
+                          ...product,
+                          selectedOptions,
+                        });
+                        toast.success("Added to cart");
+                        onOpenChange(false);
+                      }
+                    }}
+                    disabled={product.currentStock === 0}
                   >
-                    <Minus className="h-3 w-3" />
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Add to Cart
                   </Button>
-                  <span className="mx-3 w-6 text-center text-sm">
-                    {quantity}
-                  </span>
                   <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleQuantityChange(quantity + 1)}
-                    disabled={quantity >= product.currentStock}
-                    className="h-8 w-8"
+                    className="rounded-full h-10 bg-theme-color cursor-pointer"
+                    onClick={handleBuyNow}
+                    disabled={product.currentStock === 0}
                   >
-                    <Plus className="h-3 w-3" />
+                    Buy Now
                   </Button>
                 </div>
               </div>
             </div>
-
-            {/* Actions - Fixed at bottom */}
-            <div className="p-5 border-t">
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  className="rounded-full h-10 cursor-pointer"
-                  variant="outline"
-                  onClick={() => {
-                    for (let i = 0; i < quantity; i++) {
-                      addItem({
-                        ...product,
-                        selectedOptions,
-                      });
-                    }
-                  }}
-                  disabled={product.currentStock === 0}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Add to Cart
-                </Button>
-                <Button
-                  className="rounded-full h-10 cursor-pointer"
-                  onClick={() => {
-                    for (let i = 0; i < quantity; i++) {
-                      addItem({
-                        ...product,
-                        selectedOptions,
-                      });
-                    }
-                    onOpenChange(false);
-                    router.push("/checkout");
-                  }}
-                  disabled={product.currentStock === 0}
-                >
-                  Buy Now
-                </Button>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>

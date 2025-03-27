@@ -148,3 +148,9 @@
   background-color: var(--shop-theme-color);
   color: white;
 }
+.bg-theme-color {
+  background-color: var(--shop-theme-color);
+}
+.text-theme-color {
+  color: var(--shop-theme-color);
+}

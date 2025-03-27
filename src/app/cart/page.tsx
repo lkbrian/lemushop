@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
+import { useStore } from "@/context/store-context";
 
 export default function CartPage() {
   const router = useRouter();
@@ -21,6 +22,8 @@ export default function CartPage() {
   } = useCart();
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
+  const { state } = useStore();
+  const { store } = state;
 
   const subtotal = cartItems
     ? cartItems.reduce((total, item) => {
@@ -73,7 +76,7 @@ export default function CartPage() {
             Looks like you haven&apos;t added anything to your cart yet.
           </p>
           <Button asChild>
-            <Link href="/shop">Continue Shopping</Link>
+            <Link href="/">Continue Shopping</Link>
           </Button>
         </div>
       ) : (
@@ -115,7 +118,7 @@ export default function CartPage() {
                               {item.name as string}
                             </h3>
                             <p className="font-semibold">
-                              $
+                              {store?.currencySymbol + " "}
                               {(
                                 (((item.salePrice ||
                                   item.price ||
@@ -185,7 +188,7 @@ export default function CartPage() {
 
             <div className="mt-6 flex justify-between">
               <Button variant="outline" asChild>
-                <Link href="/shop">Continue Shopping</Link>
+                <Link href="/">Continue Shopping</Link>
               </Button>
             </div>
           </div>
@@ -197,13 +200,19 @@ export default function CartPage() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${(subtotal / 100).toFixed(2)}</span>
+                  <span>
+                    {store?.currencySymbol + " "}
+                    {(subtotal / 100).toFixed(2)}
+                  </span>
                 </div>
 
                 {discount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount</span>
-                    <span>-${(discount / 100).toFixed(2)}</span>
+                    <span>
+                      -{store?.currencySymbol + " "}
+                      {(discount / 100).toFixed(2)}
+                    </span>
                   </div>
                 )}
 
@@ -212,7 +221,9 @@ export default function CartPage() {
                   <span>
                     {shipping === 0
                       ? "Free"
-                      : `$${(shipping / 100).toFixed(2)}`}
+                      : `${store?.currencySymbol + " "}${(
+                          shipping / 100
+                        ).toFixed(2)}`}
                   </span>
                 </div>
 
@@ -220,7 +231,10 @@ export default function CartPage() {
 
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
-                  <span>${(total / 100).toFixed(2)}</span>
+                  <span>
+                    {store?.currencySymbol + " "}
+                    {(total / 100).toFixed(2)}
+                  </span>
                 </div>
 
                 <div className="pt-4">
@@ -246,7 +260,16 @@ export default function CartPage() {
                     </p>
                   )}
 
-                  <Button className="w-full" onClick={handleCheckout}>
+                  <Button
+                    className="w-full h-10 bg-theme-color"
+                    onClick={() => {
+                      handleCheckout();
+                      sessionStorage.setItem(
+                        "fromBuyNow",
+                        JSON.stringify(false)
+                      );
+                    }}
+                  >
                     Proceed to Checkout
                   </Button>
                 </div>
