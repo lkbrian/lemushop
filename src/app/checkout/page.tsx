@@ -25,7 +25,7 @@ import {
 } from "@/lib/types";
 import { formatPayload } from "@/lib/utils";
 import { CheckCircle2, CreditCard, Phone } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
@@ -34,8 +34,8 @@ type CheckoutStep = "personal" | "payment";
 type PaymentMethod = "mpesa" | "card";
 
 export default function CheckoutPage() {
-  const searchParams = useSearchParams();
-  const buyNow = searchParams.get("buyNow");
+  const router = useRouter();
+  const { buyNow } = router.query;
   const { state } = useStore();
   const { store } = state;
   const [currentStep, setCurrentStep] = useState<CheckoutStep>("personal");
