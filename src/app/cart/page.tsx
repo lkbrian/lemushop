@@ -119,13 +119,8 @@ export default function CartPage() {
                             </h3>
                             <p className="font-semibold">
                               {store?.currencySymbol + " "}
-                              {(
-                                (((item.salePrice ||
-                                  item.price ||
-                                  0) as number) *
-                                  item.quantity) /
-                                100
-                              ).toFixed(2)}
+                              {((item.salePrice || item.price || 0) as number) *
+                                item.quantity}
                             </p>
                           </div>
 
@@ -202,7 +197,7 @@ export default function CartPage() {
                   <span className="text-gray-600">Subtotal</span>
                   <span>
                     {store?.currencySymbol + " "}
-                    {(subtotal }
+                    {subtotal}
                   </span>
                 </div>
 
@@ -211,7 +206,7 @@ export default function CartPage() {
                     <span>Discount</span>
                     <span>
                       -{store?.currencySymbol + " "}
-                      {(discount }
+                      {discount}
                     </span>
                   </div>
                 )}
@@ -221,9 +216,7 @@ export default function CartPage() {
                   <span>
                     {shipping === 0
                       ? "Free"
-                      : `${store?.currencySymbol + " "}${(
-                          shipping / 100
-                        ).toFixed(2)}`}
+                      : `${store?.currencySymbol + " "}${shipping}`}
                   </span>
                 </div>
 
@@ -233,7 +226,7 @@ export default function CartPage() {
                   <span>Total</span>
                   <span>
                     {store?.currencySymbol + " "}
-                    {(total }
+                    {total}
                   </span>
                 </div>
 
