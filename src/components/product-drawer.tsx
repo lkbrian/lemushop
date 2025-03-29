@@ -269,11 +269,11 @@ export function ProductDrawer({ id, open, onOpenChange }: ProductDrawerProps) {
                   <div>
                     <p className="text-xl font-bold">
                       {store?.currencySymbol + " "}
-                      {(product.salePrice / 100).toFixed(2)}
+                      {product.salePrice}
                     </p>
                     {product.originalPrice > product.salePrice && (
                       <p className="text-xs text-gray-500 line-through">
-                        ${(product.originalPrice / 100).toFixed(2)}
+                        ${product.originalPrice}
                       </p>
                     )}
                   </div>

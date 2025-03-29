@@ -202,7 +202,7 @@ export default function CartPage() {
                   <span className="text-gray-600">Subtotal</span>
                   <span>
                     {store?.currencySymbol + " "}
-                    {(subtotal / 100).toFixed(2)}
+                    {(subtotal }
                   </span>
                 </div>
 
@@ -211,7 +211,7 @@ export default function CartPage() {
                     <span>Discount</span>
                     <span>
                       -{store?.currencySymbol + " "}
-                      {(discount / 100).toFixed(2)}
+                      {(discount }
                     </span>
                   </div>
                 )}
@@ -233,7 +233,7 @@ export default function CartPage() {
                   <span>Total</span>
                   <span>
                     {store?.currencySymbol + " "}
-                    {(total / 100).toFixed(2)}
+                    {(total }
                   </span>
                 </div>
 

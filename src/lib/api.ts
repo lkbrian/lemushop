@@ -76,18 +76,46 @@ export const storeApi = {
   },
 
   // Get store products by store ID
-  getStoreProducts: async (id: string | number) => {
+  getStoreProducts: async (
+    id: string | number,
+    query: string,
+    selectedCategories: Category[],
+    page: number,
+    size: number
+  ) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/shop/product/store/${id}`, {
-        headers,
-      });
+      const categoryParams = selectedCategories
+        .map((c) => `category=${c.id}`)
+        .join("&");
+      const response = await fetch(
+        `${API_BASE_URL}/shop/product/store/${id}?page=${page}&size=${size}&filter=${query}&${categoryParams}`,
+        {
+          headers,
+        }
+      );
       return await handleApiResponse(response);
     } catch (error) {
       console.error("Error fetching store products:", error);
       throw error;
     }
   },
-
+  filterProducts: async (
+    query: string,
+    id: number,
+    selectedCategories: Category[]
+  ) => {
+    try {
+      const categoryParams = selectedCategories
+        .map((c) => `category=${c.id}`)
+        .join("&");
+      const url = `${API_BASE_URL}/shop/product/store/${id}?filter=${query}&${categoryParams}`;
+      const response = await fetch(url, { headers });
+      return await handleApiResponse(response);
+    } catch (error) {
+      console.error("Error fetching filtered products:", error);
+      throw error;
+    }
+  },
   // Get single product by ID
   getSingleProduct: async (id: string | number) => {
     try {
@@ -195,17 +223,21 @@ export const storeApi = {
       throw error;
     }
   },
-  filterProducts: async (query: string, selectedCategories: Category[]) => {
-    try {
-      const categoryParams = selectedCategories
-        .map((c) => `category=${c.id}`)
-        .join("&");
-      const url = `${API_BASE_URL}/shop/product/store/1?filter=${query}&${categoryParams}`;
-      const response = await fetch(url, { headers });
-      return await handleApiResponse(response);
-    } catch (error) {
-      console.error("Error fetching filtered products:", error);
-      throw error;
-    }
-  },
+  // filterProducts: async (
+  //   query: string,
+  //   id: number,
+  //   selectedCategories: Category[]
+  // ) => {
+  //   try {
+  //     const categoryParams = selectedCategories
+  //       .map((c) => `category=${c.id}`)
+  //       .join("&");
+  //     const url = `${API_BASE_URL}/shop/product/store/${id}?filter=${query}&${categoryParams}`;
+  //     const response = await fetch(url, { headers });
+  //     return await handleApiResponse(response);
+  //   } catch (error) {
+  //     console.error("Error fetching filtered products:", error);
+  //     throw error;
+  //   }
+  // },
 };

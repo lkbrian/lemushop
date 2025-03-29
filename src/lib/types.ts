@@ -100,6 +100,18 @@ export interface ProductList {
   first: boolean;
   empty: boolean;
 }
+export interface pageableContent {
+  // pageable: string;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: Sort;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
 
 export interface Category {
   id: number;
@@ -194,4 +206,22 @@ export interface StatusResponse {
   transactionId: string;
   amount: string;
   serviceName: string;
+}
+export interface PageContent {
+  totalPages: number;
+  number: number;
+  currentPage: number;
+  first: boolean;
+  last: boolean;
+  onPageChange: (page: number) => void;
+}
+export interface SmartPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  config?: {
+    showFirstLast?: boolean;
+    showAdjacentPages?: number;
+    showEllipsisThreshold?: number;
+  };
 }

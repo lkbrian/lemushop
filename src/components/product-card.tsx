@@ -84,12 +84,12 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
         <div className="flex items-center justify-between mt-2">
           <p className="font-bold">
             {store?.currencySymbol + " "}
-            {(product.salePrice / 100).toFixed(2)}
+            {product.salePrice}
           </p>
           {product.originalPrice > product.salePrice && (
             <p className="text-xs text-gray-500 line-through">
               {store?.currencySymbol}
-              {(product.originalPrice / 100).toFixed(2)}
+              {product.originalPrice}
             </p>
           )}
         </div>

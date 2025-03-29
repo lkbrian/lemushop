@@ -14,7 +14,6 @@ export function Header() {
 
   // Destructure the state
   const { store, loading } = state;
-  console.log("header", store);
   // if (store) {
   //   document.documentElement.style.setProperty(
   //     "--shop-theme-color",

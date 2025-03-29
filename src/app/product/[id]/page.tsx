@@ -211,7 +211,6 @@ export default function ProductPage() {
             />
           </div>
 
-          {/* Thumbnail images - scrollable on mobile */}
           <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar scrollbar-thin ">
             {(product.images || [product.imageUrl]).map((image, index) => (
               <div
@@ -267,19 +266,17 @@ export default function ProductPage() {
           <div className="flex items-baseline mb-4 sm:mb-6">
             <span className="text-2xl sm:text-3xl font-bold">
               {store?.currencySymbol + " "}
-              {(product.salePrice / 100).toFixed(2)}
+              {product.salePrice}
             </span>
             {product.originalPrice > product.salePrice && (
               <>
                 <span className="ml-2 text-sm sm:text-base text-gray-500 line-through">
                   {store?.currencySymbol + " "}
-                  {(product.originalPrice / 100).toFixed(2)}
+                  {product.originalPrice}
                 </span>
                 <span className="ml-2 text-sm sm:text-base text-green-600 font-medium">
                   Save{store?.currencySymbol + " "}
-                  {((product.originalPrice - product.salePrice) / 100).toFixed(
-                    2
-                  )}
+                  {product.originalPrice - product.salePrice / 100}
                 </span>
               </>
             )}
@@ -328,7 +325,7 @@ export default function ProductPage() {
                   <SelectContent>
                     {product.options.colour.map((color) => (
                       <SelectItem key={color} value={color}>
-                        {color}
+                        {color || "c"}
                       </SelectItem>
                     ))}
                   </SelectContent>

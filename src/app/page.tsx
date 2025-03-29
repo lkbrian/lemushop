@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-// import { products } from "@/lib/data";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,19 +14,33 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, X } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductDrawer } from "@/components/product-drawer";
-import { Category, type Product, type ProductList } from "@/lib/types";
+import {
+  Category,
+  pageableContent,
+  type Product,
+  type ProductList,
+} from "@/lib/types";
 import { storeApi } from "@/lib/api";
 import { ProductCardSkeleton } from "@/components/product-card-skeleton";
 import { useStore } from "@/context/store-context";
 import { debounce } from "lodash";
 import { toast } from "sonner";
+// import {
+//   Pagination,
+//   PaginationContent,
+//   PaginationEllipsis,
+//   PaginationItem,
+//   PaginationLink,
+//   PaginationNext,
+//   PaginationPrevious,
+// } from "@/components/ui/pagination";
+import Paginator from "@/components/paginator";
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [sortBy] = useState<string>("featured");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingFilter, setLoadingFilter] = useState<boolean>(false);
@@ -35,8 +48,9 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const { state } = useStore();
   const { store } = state;
-
-  // Memoized categories from store
+  const [pageContent, setPageContent] = useState<pageableContent>();
+  const [page, setPage] = useState<number>(0);
+  const [size, setSize] = useState<number>(15);
   useEffect(() => {
     setCategories(store?.categories || []);
   }, [store?.categories]);
@@ -44,86 +58,69 @@ export default function Home() {
   if (error) {
     toast.error(error);
   }
-  // Fetch products with proper cleanup
+
   const fetchProducts = useCallback(async () => {
+    setSize(15);
     try {
       setLoading(true);
       setError(null);
       if (store) {
         const response: ProductList = await storeApi.getStoreProducts(
-          store.storeId
+          store.storeId,
+          searchQuery.trim(),
+          selectedCategories,
+          page,
+          size
         );
+
+        // const { content, ...rest } = response;
+        setPageContent(response);
+
         setProducts(response.content || []);
+        // console.log("<<pagination>>", pageContent);
+        // console.log("<<total pages>>", pageContent?.totalPages);
       }
     } catch (err) {
       setError("Failed to fetch products");
       console.error("Fetch products error:", err);
-      // Consider setting products to empty array here to avoid displaying stale data
       setProducts([]);
     } finally {
       setLoading(false);
     }
-  }, [store]);
+  }, [store, page, size, searchQuery, selectedCategories]);
 
-  // Initial fetch and cleanup
   useEffect(() => {
     fetchProducts();
     return () => {
-      // Cancel any pending API requests if component unmounts
-      // (implementation depends on your API client)
+      // Cleanup if needed
     };
   }, [fetchProducts]);
 
-  // Filter products with error handling and loading states
   const handleFilter = useCallback(async () => {
     try {
+      setPage(0);
+
       setLoadingFilter(true);
-      const filteredProducts = await storeApi.filterProducts(
-        searchQuery.trim(),
-        selectedCategories
-      );
-      setProducts(filteredProducts?.content || []);
+      if (store) {
+        fetchProducts();
+      }
     } catch (error) {
       console.error("Error during filtering:", error);
       setError("Failed to apply filters");
-      // Keep current products or set to empty array based on your UX needs
     } finally {
       setLoadingFilter(false);
     }
-  }, [searchQuery, selectedCategories]);
+  }, [store, fetchProducts]);
 
-  // Automatically filter when search or categories change (with debounce)
-  // Debounce search to avoid too many API calls
   const debouncedFilter = useMemo(() => {
     return debounce(handleFilter, 300);
-    //Dono't remve the cooment below it has been use to supress a warning - lkbrian
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, selectedCategories]);
+
   useEffect(() => {
     debouncedFilter();
     return () => debouncedFilter.cancel();
   }, [searchQuery, selectedCategories, debouncedFilter]);
-
-  // Memoized sorted products to avoid unnecessary recalculations
-  const sortedProducts = useMemo(() => {
-    return [...products].sort((a, b) => {
-      switch (sortBy) {
-        case "price-low":
-          return a.salePrice - b.salePrice;
-        case "price-high":
-          return b.salePrice - a.salePrice;
-        case "newest":
-          return (b.id || 0) - (a.id || 0);
-        case "rating":
-          return (b.rating || 0) - (a.rating || 0);
-        case "featured":
-        default:
-          const discountDiff = (b.discount || 0) - (a.discount || 0);
-          if (discountDiff !== 0) return discountDiff;
-          return (b.rating || 0) - (a.rating || 0);
-      }
-    });
-  }, [products, sortBy]);
 
   const handleQuickView = (product: Product, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -151,6 +148,18 @@ export default function Home() {
     setSelectedCategories([]);
     setSearchQuery("");
   };
+  // const paginate  = async(id:number)=>{
+  //   try{
+  //     fetchProducts()
+
+  //   }catch(error){
+  //     console.log(error)
+  //   }
+  //   finally{
+
+  //   }
+
+  // }
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Filter Bar */}
@@ -165,10 +174,11 @@ export default function Home() {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
+                // setPage(0);
               }}
               className="w-[350px] md:w-[300px] sm:w-auto"
             />
-            <Button type="submit" size="icon">
+            <Button type="submit" size="icon" className="bg-theme-color">
               <Search className="h-4 w-4" />
               <span className="sr-only">Search</span>
             </Button>
@@ -204,7 +214,6 @@ export default function Home() {
             {selectedCategories.map((category: Category) => (
               <span
                 key={category.id}
-                // variant="secondary"
                 className="flex items-center gap-1 h-6 pl-2 text-sm bg-gray-200 rounded-full"
               >
                 {category.name}
@@ -230,33 +239,119 @@ export default function Home() {
       <div className="flex-1">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {loading &&
-            sortedProducts.length === 0 &&
             [1, 2, 3, 4, 5].map((index) => <ProductCardSkeleton key={index} />)}
           {loadingFilter &&
-            sortedProducts.length === 0 &&
+            !loading &&
+            products.length === 0 &&
             [1, 2, 3, 4, 5].map((index) => <ProductCardSkeleton key={index} />)}
         </div>
-        {!loading && !loadingFilter && sortedProducts.length === 0 ? (
+        {!loading && !loadingFilter && products.length === 0 ? (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold mb-2">No products found</h2>
             <p className="text-gray-500 mb-4">
               Try adjusting your search or filter criteria
             </p>
-            <Button onClick={clearAllFilters}>Clear Filters</Button>
+            <Button className="bg-theme-color" onClick={clearAllFilters}>
+              Clear Filters
+            </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {!loading &&
-              sortedProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onQuickView={handleQuickView}
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {!loading &&
+                products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onQuickView={handleQuickView}
+                  />
+                ))}
+            </div>
+            <div className="mx-auto py-3">
+              {/* {pageContent?.totalPages && (
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem
+                      onClick={() => !pageContent.first && setPage(page - 1)}
+                    >
+                      <PaginationPrevious />
+                    </PaginationItem>
+
+                    <PaginationItem onClick={() => setPage(0)}>
+                      <PaginationLink isActive={pageContent.number === 0}>
+                        1
+                      </PaginationLink>
+                    </PaginationItem>
+
+                    {pageContent.number > 2 && (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )}
+
+                    {Array.from({ length: pageContent.totalPages }, (_, i) => {
+                      // Only display pages near current page
+                      if (
+                        i > 0 && // Skip first page (already shown)
+                        i < pageContent.totalPages - 1 && // Skip last page (will show later)
+                        Math.abs(i - pageContent.number) <= 1 // Show current ±1 pages
+                      ) {
+                        return (
+                          <PaginationItem key={i} onClick={() => setPage(i)}>
+                            <PaginationLink isActive={pageContent.number === i}>
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      }
+                      return null;
+                    })}
+
+                    {pageContent.number < pageContent.totalPages - 3 && (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )}
+
+                    {pageContent.totalPages > 1 && (
+                      <PaginationItem
+                        onClick={() => setPage(pageContent.totalPages - 1)}
+                      >
+                        <PaginationLink
+                          isActive={
+                            pageContent.number === pageContent.totalPages - 1
+                          }
+                        >
+                          {pageContent.totalPages}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
+
+                    <PaginationItem
+                      onClick={() => !pageContent.last && setPage(page + 1)}
+                    >
+                      <PaginationNext />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )} */}
+              {!loading && pageContent && (
+                <Paginator
+                  totalPages={pageContent?.totalPages}
+                  number={pageContent?.number} // zero-indexed
+                  first={pageContent?.first}
+                  last={pageContent?.last}
+                  onPageChange={setPage}
+                  currentPage={page}
                 />
-              ))}
-          </div>
+              )}
+            </div>
+          </>
         )}
       </div>
+
+      {/* 
+            previous ..  curr-2 curr-1  current.. */}
 
       <ProductDrawer
         id={selectedProduct?.id}
@@ -266,3 +361,9 @@ export default function Home() {
     </div>
   );
 }
+
+/* {Array.from(pageContent.totalPages).map(()=>{
+  <PaginationItem>
+    <PaginationLink href="#">1</PaginationLink>
+  </PaginationItem>;
+})} */
