@@ -49,3 +49,13 @@ export function restrictInput(
   const rawValue = input.value.replace(new RegExp(pattern, "g"), "");
   input.setAttribute("data-raw", "254" + rawValue);
 }
+
+export function formatMoney(amount: number | string, currency = "USD"): string {
+  const num = typeof amount === "string" ? parseFloat(amount) : amount;
+  return num.toLocaleString("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+}

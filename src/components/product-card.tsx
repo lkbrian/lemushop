@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useStore } from "@/context/store-context";
+import { formatMoney } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
@@ -83,13 +84,11 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
 
         <div className="flex items-center justify-between mt-2">
           <p className="font-bold">
-            {store?.currencySymbol + " "}
-            {product.salePrice}
+            {formatMoney(product.salePrice, store?.currencySymbol)}
           </p>
           {product.originalPrice > product.salePrice && (
             <p className="text-xs text-gray-500 line-through">
-              {store?.currencySymbol}
-              {product.originalPrice}
+              {formatMoney(product.originalPrice, store?.currencySymbol)}
             </p>
           )}
         </div>

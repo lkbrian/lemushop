@@ -186,7 +186,7 @@ export default function Home() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex gap-2">
+              <Button variant="outline" className="flex gap-2 cursor-pointer">
                 <Filter className="h-4 w-4" />
                 <span>Filter</span>
               </Button>

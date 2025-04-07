@@ -226,7 +226,7 @@ export function PersonalInfoForm({
           <CardFooter className="flex justify-end">
             <Button
               type="submit"
-              className="bg-theme-color ml-auto"
+              className="bg-theme-color ml-auto cursor-pointer"
               disabled={isSubmitting || !isValid}
             >
               {isSubmitting ? "Processing..." : "Continue to Payment"}

@@ -44,7 +44,7 @@ export function Header() {
 
         <div className="flex items-center">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="#">
+            <Link href={"https://lemu.shop"}>
               <User className="h-4 w-4 mr-2" />
               Become a seller
             </Link>

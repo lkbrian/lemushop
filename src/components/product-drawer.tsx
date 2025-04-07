@@ -19,6 +19,7 @@ import type { Product } from "@/lib/types";
 import { toast } from "sonner";
 import { storeApi } from "@/lib/api";
 import { useStore } from "@/context/store-context";
+import { formatMoney } from "@/lib/utils";
 
 interface ProductDrawerProps {
   id: number | string | undefined;
@@ -268,12 +269,14 @@ export function ProductDrawer({ id, open, onOpenChange }: ProductDrawerProps) {
                 <div className="flex justify-between items-center mb-3">
                   <div>
                     <p className="text-xl font-bold">
-                      {store?.currencySymbol + " "}
-                      {product.salePrice}
+                      {formatMoney(product.salePrice, store?.currencySymbol)}
                     </p>
                     {product.originalPrice > product.salePrice && (
                       <p className="text-xs text-gray-500 line-through">
-                        ${product.originalPrice}
+                        {formatMoney(
+                          product.originalPrice,
+                          store?.currencySymbol
+                        )}
                       </p>
                     )}
                   </div>

@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
 import { useStore } from "@/context/store-context";
+import { formatMoney } from "@/lib/utils";
 
 export default function CartPage() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function CartPage() {
       }, 0)
     : 0;
   const discount = promoApplied ? Math.round(subtotal * 0.1) : 0;
-  const shipping = subtotal > 5000 ? 0 : 500;
+  const shipping = 0;
   const total = subtotal - discount + shipping;
 
   const updateQuantity = (
@@ -75,7 +76,7 @@ export default function CartPage() {
           <p className="text-gray-500 mb-6">
             Looks like you haven&apos;t added anything to your cart yet.
           </p>
-          <Button asChild>
+          <Button className="bg-theme-color" asChild>
             <Link href="/">Continue Shopping</Link>
           </Button>
         </div>
@@ -102,12 +103,15 @@ export default function CartPage() {
                                 typeof item.imageUrl === "string" &&
                                 item.imageUrl
                                   ? item.imageUrl
+                                  : Array.isArray(item.images) && item.images[0]
+                                  ? item.images[0]
                                   : "/placeholder.svg"
                               }
                               alt={item.name as string}
                               fill
                               className="object-cover"
                               priority
+                              sizes="100%"
                             />
                           </div>
                         </div>
@@ -118,13 +122,16 @@ export default function CartPage() {
                               {item.name as string}
                             </h3>
                             <p className="font-semibold">
-                              {store?.currencySymbol + " "}
-                              {((item.salePrice || item.price || 0) as number) *
-                                item.quantity}
+                              {formatMoney(
+                                ((item.salePrice ||
+                                  item.price ||
+                                  0) as number) * item.quantity,
+                                store?.currencySymbol
+                              )}
                             </p>
                           </div>
 
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 mt-1 line-clamp-2">
                             {item.description as string}
                           </p>
 
@@ -195,28 +202,23 @@ export default function CartPage() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>
-                    {store?.currencySymbol + " "}
-                    {subtotal}
-                  </span>
+                  <span>{formatMoney(subtotal, store?.currencySymbol)}</span>
                 </div>
 
                 {discount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount</span>
-                    <span>
-                      -{store?.currencySymbol + " "}
-                      {discount}
-                    </span>
+                    <span>-{formatMoney(discount, store?.currencySymbol)}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
                   <span>
-                    {shipping === 0
+                    {/* {shipping === 0
                       ? "Free"
-                      : `${store?.currencySymbol + " "}${shipping}`}
+                      : `${formatMoney(shipping, store?.currencySymbol)}`} */}
+                    N/A
                   </span>
                 </div>
 
@@ -224,10 +226,7 @@ export default function CartPage() {
 
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
-                  <span>
-                    {store?.currencySymbol + " "}
-                    {total}
-                  </span>
+                  <span>{formatMoney(total, store?.currencySymbol)}</span>
                 </div>
 
                 <div className="pt-4">
@@ -242,6 +241,7 @@ export default function CartPage() {
                       variant="outline"
                       onClick={applyPromoCode}
                       disabled={promoApplied || !promoCode}
+                      className="cursor-pointer"
                     >
                       Apply
                     </Button>
@@ -254,7 +254,7 @@ export default function CartPage() {
                   )}
 
                   <Button
-                    className="w-full h-10 bg-theme-color"
+                    className="w-full h-10 bg-theme-color cursor-pointer"
                     onClick={() => {
                       handleCheckout();
                       sessionStorage.setItem(

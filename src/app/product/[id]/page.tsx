@@ -19,6 +19,7 @@ import { useCart } from "@/context/cart-context";
 import type { Product } from "@/lib/types";
 import { useStore } from "@/context/store-context";
 import { storeApi } from "@/lib/api";
+import { formatMoney } from "@/lib/utils";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -265,18 +266,18 @@ export default function ProductPage() {
           {/* Price - adjusted text size for mobile */}
           <div className="flex items-baseline mb-4 sm:mb-6">
             <span className="text-2xl sm:text-3xl font-bold">
-              {store?.currencySymbol + " "}
-              {product.salePrice}
+              {formatMoney(product.salePrice, store?.currencySymbol)}
             </span>
             {product.originalPrice > product.salePrice && (
               <>
                 <span className="ml-2 text-sm sm:text-base text-gray-500 line-through">
-                  {store?.currencySymbol + " "}
-                  {product.originalPrice}
+                  {formatMoney(product.originalPrice, store?.currencySymbol)}
                 </span>
                 <span className="ml-2 text-sm sm:text-base text-green-600 font-medium">
-                  Save{store?.currencySymbol + " "}
-                  {product.originalPrice - product.salePrice / 100}
+                  {formatMoney(
+                    product.originalPrice - product.salePrice,
+                    store?.currencySymbol
+                  )}
                 </span>
               </>
             )}
